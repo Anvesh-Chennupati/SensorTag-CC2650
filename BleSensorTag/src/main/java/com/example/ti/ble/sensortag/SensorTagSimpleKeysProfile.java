@@ -57,11 +57,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
+import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
+
 
 import com.example.ti.ble.common.BluetoothLeService;
 import com.example.ti.ble.common.GattInfo;
@@ -69,6 +78,43 @@ import com.example.ti.ble.common.GenericBluetoothProfile;
 import com.example.ti.util.Point3D;
 
 public class SensorTagSimpleKeysProfile extends GenericBluetoothProfile {
+
+	private void addNotification(String pressedKey) {
+		try {
+			Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+			r.play();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    NotificationCompat.Builder builder;
+	    if(pressedKey.equals("Left")){
+            builder = new NotificationCompat.Builder(context.getApplicationContext()).setSmallIcon(R.drawable.accelerometer)
+                    .setContentTitle("Left Key Pressed")
+                    .setContentText ("Take action!");
+
+        }
+	    else{
+            builder = new NotificationCompat.Builder(context.getApplicationContext()).setSmallIcon(R.drawable.accelerometer)
+                    .setContentTitle("Right Key Pressed")
+                    .setContentText("Take action!");
+            builder.setDefaults(Notification.DEFAULT_SOUND| Notification.DEFAULT_LIGHTS|Notification.DEFAULT_VIBRATE);
+
+        }
+		// Builds your notification
+//		builder.setDefaults(Notification.DEFAULT_SOUND| Notification.DEFAULT_LIGHTS|Notification.DEFAULT_VIBRATE);
+		builder.setDefaults(Notification.DEFAULT_SOUND);
+
+		// Creates the intent needed to show the notification
+		Intent notificationIntent = new Intent(context.getApplicationContext(), MainActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.setContentIntent(contentIntent);
+
+		// Add as notification
+		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		manager.notify(0, builder.build());
+	}
+
 	public SensorTagSimpleKeysProfile(Context con,BluetoothDevice device,BluetoothGattService service,BluetoothLeService controller) {
 		super(con,device,service,controller);
 		this.tRow =  new SensorTagSimpleKeysTableRow(con);
@@ -114,11 +160,17 @@ public class SensorTagSimpleKeysProfile extends GenericBluetoothProfile {
             byte[] value = c.getValue();
 			switch(value[0]) {
 			case 0x1:
+//				Toast.makeText(context.getApplicationContext(), "Left key", Toast.LENGTH_LONG);
+				addNotification("Left");
+				System.out.println("Left key pressed");
 				tmpRow.leftKeyPressStateImage.setImageResource(R.drawable.leftkeyon_300);
 				tmpRow.rightKeyPressStateImage.setImageResource(R.drawable.rightkeyoff_300);
 				tmpRow.reedStateImage.setImageResource(R.drawable.reedrelayoff_300);
 				break;
 			case 0x2:
+				addNotification("Right");
+//				Toast.makeText(context.getApplicationContext(), "right key", Toast.LENGTH_LONG);
+				System.out.println("right key pressed");
 				tmpRow.leftKeyPressStateImage.setImageResource(R.drawable.leftkeyoff_300);
 				tmpRow.rightKeyPressStateImage.setImageResource(R.drawable.rightkeyon_300);
 				tmpRow.reedStateImage.setImageResource(R.drawable.reedrelayoff_300);
