@@ -65,9 +65,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.media.MediaPlayer;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 
@@ -75,18 +73,19 @@ import android.view.View;
 import com.example.ti.ble.common.BluetoothLeService;
 import com.example.ti.ble.common.GattInfo;
 import com.example.ti.ble.common.GenericBluetoothProfile;
-import com.example.ti.util.Point3D;
 
 public class SensorTagSimpleKeysProfile extends GenericBluetoothProfile {
 
 	private void addNotification(String pressedKey) {
-		try {
-			Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-			Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
-			r.play();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//			Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+//			r.play();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		final MediaPlayer danger_sound = MediaPlayer.create(context.getApplicationContext(), R.raw.danger_sound);
+		danger_sound.start();
 	    NotificationCompat.Builder builder;
 	    if(pressedKey.equals("Left")){
             builder = new NotificationCompat.Builder(context.getApplicationContext()).setSmallIcon(R.drawable.accelerometer)
