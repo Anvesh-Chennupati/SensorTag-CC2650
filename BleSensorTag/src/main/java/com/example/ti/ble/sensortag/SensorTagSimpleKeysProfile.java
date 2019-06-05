@@ -98,7 +98,6 @@ public class SensorTagSimpleKeysProfile extends GenericBluetoothProfile {
                     .setContentTitle("Right Key Pressed")
                     .setContentText("Take action!");
             builder.setDefaults(Notification.DEFAULT_SOUND| Notification.DEFAULT_LIGHTS|Notification.DEFAULT_VIBRATE);
-
         }
 		// Builds your notification
 //		builder.setDefaults(Notification.DEFAULT_SOUND| Notification.DEFAULT_LIGHTS|Notification.DEFAULT_VIBRATE);
