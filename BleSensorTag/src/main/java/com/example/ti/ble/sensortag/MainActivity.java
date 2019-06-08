@@ -238,7 +238,6 @@ public class MainActivity extends ViewPagerActivity {
 		// Log.e(TAG,"onDestroy");
 		super.onDestroy();
 
-		
 		mBtAdapter = null;
 		
 		// Clear cache
