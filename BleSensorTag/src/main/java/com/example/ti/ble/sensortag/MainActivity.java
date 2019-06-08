@@ -52,17 +52,11 @@
  **************************************************************************************************/
 package com.example.ti.ble.sensortag;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.pm.PackageManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -75,12 +69,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-// import android.util.Log;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,6 +88,13 @@ import com.example.ti.ble.common.BluetoothLeService;
 import com.example.ti.ble.common.HCIDefines;
 import com.example.ti.ble.common.HelpView;
 import com.example.ti.util.CustomToast;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+// import android.util.Log;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MainActivity extends ViewPagerActivity {
@@ -144,8 +145,8 @@ public class MainActivity extends ViewPagerActivity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
-										   String permissions[],
-										   int[] grantResults) {
+                                           String[] permissions,
+                                           int[] grantResults) {
 		switch (requestCode) {
 			case PERMISSION_REQUEST_COARSE_LOCATION: {
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -206,7 +207,6 @@ public class MainActivity extends ViewPagerActivity {
 			a.show();
 			return;
 		}
-
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -326,7 +326,7 @@ public class MainActivity extends ViewPagerActivity {
 		if (!mInitialised) {
 			// Broadcast receiver
             mBluetoothLeService = BluetoothLeService.getInstance();
-            mBluetoothManager = mBluetoothLeService.getBtManager();
+            mBluetoothManager = BluetoothLeService.getBtManager();
             mBtAdapter = mBluetoothManager.getAdapter();
 			if (mBtAdapter == null) {
 				Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_LONG).show();
